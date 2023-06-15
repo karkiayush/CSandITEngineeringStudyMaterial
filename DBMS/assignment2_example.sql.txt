@@ -1,0 +1,93 @@
+-- Database, Schema, Tables, Relations and Users
+-- Default user: postgres
+-- DDL for Database > Schema > Tables > Relations>Insert data
+
+-- Creating a new database
+
+CREATE DATABASE db_college
+	WITH
+	OWNER = postgres; -- Default is postgres
+
+-- Creating a new Schema 
+
+CREATE SCHEMA assignment
+	AUTHORIZATION postgres;
+
+-- Create table departments
+CREATE TABLE assignment.departments
+(
+	id integer,
+	name character varying(100),
+	description text
+);
+
+ALTER TABLE assignment.departments
+	OWNER TO postgres;
+
+-- Declaring a primary key.
+ALTER TABLE assignment.departments
+    ADD CONSTRAINT departmentid PRIMARY KEY (id);
+
+CREATE TABLE assignment.courses
+(
+	id integer,
+	name character varying(100),
+	description text,
+	department_id integer
+);
+
+ALTER TABLE assignment.courses
+	OWNER TO postgres;
+
+-- Declaring a primary key.
+ALTER TABLE assignment.courses
+    ADD CONSTRAINT courseid PRIMARY KEY (id);
+
+CREATE TABLE assignment.modules
+(
+	id integer,
+	name character varying(100),
+	credit integer,
+	hours integer
+);
+
+ALTER TABLE assignment.modules
+	OWNER TO postgres;
+
+-- Declaring a primary key.
+ALTER TABLE assignment.modules
+    ADD CONSTRAINT moduleid PRIMARY KEY (id);
+
+CREATE TABLE assignment.course_modules
+(
+	id integer,
+	module_id integer,
+	course_id integer
+);
+
+ALTER TABLE assignment.course_modules
+	OWNER TO postgres;
+-- Declaring a primary key.
+ALTER TABLE assignment.course_modules
+    ADD CONSTRAINT coursemoduleid PRIMARY KEY (id);
+
+ALTER TABLE assignment.courses
+    ADD FOREIGN KEY (department_id)
+    REFERENCES assignment.departments (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+ALTER TABLE assignment.course_modules
+    ADD FOREIGN KEY (course_id)
+    REFERENCES assignment.courses (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+ALTER TABLE assignment.course_modules
+    ADD FOREIGN KEY (module_id)
+    REFERENCES assignment.modules (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+
